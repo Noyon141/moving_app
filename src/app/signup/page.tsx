@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -9,11 +10,13 @@ const SignupPage = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
     username: "",
   });
   const onSignup = async () => {
     try {
+      if (!user.email || !user.password || !user.username) {
+        console.log("Please fill all the fields");
+      }
       const request = await axios.post("/api/users/signup", user);
       console.log("SIGNUP SUCCESSFUL", request.data);
       Router.push("/login");
@@ -47,18 +50,6 @@ const SignupPage = () => {
         value={user.password}
         onChange={(e) => setUser({ ...user, password: e.target.value })}
       />
-      <label htmlFor="confirmpassword" className="text-2xl">
-        Confirm Password
-      </label>
-      <input
-        type="password"
-        name="confirmpassword"
-        id="confirmpassword"
-        placeholder="confirm password"
-        className="p-2 my-2 md:w-[40%] outline-none border-2 border-gray-300 rounded-md focus:border-none focus:ring-1 focus:ring-gray-500"
-        value={user.confirmPassword}
-        onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
-      />
       <label htmlFor="username" className="text-2xl">
         Username
       </label>
@@ -77,6 +68,12 @@ const SignupPage = () => {
       >
         Signup
       </button>
+      <Link
+        href={"/login"}
+        className="p-2 my-2 md:w-[40%] bg-zinc-900 hover:bg-zinc-800 text-center text-white rounded-md"
+      >
+        Go to login page
+      </Link>
     </div>
   );
 };
